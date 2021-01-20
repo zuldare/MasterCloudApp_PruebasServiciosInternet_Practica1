@@ -6,3 +6,17 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+/libraries/
+/sonarlint/
+/.gitignore
+/.name
+/aws.xml
+/compiler.xml
+/encodings.xml
+/jarRepositories.xml
+/MasterCloudApp_PruebasServiciosInternet_Practica1.iml
+/misc.xml
+/modules.xml
+/uiDesigner.xml
+/vcs.xml
+/workspace.xml
