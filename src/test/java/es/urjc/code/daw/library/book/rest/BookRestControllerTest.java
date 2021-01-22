@@ -53,7 +53,7 @@ public class BookRestControllerTest {
     }
 
     @Nested
-    @DisplayName("getting books for user ")
+    @DisplayName("Get books ")
     class gettingBooksForUser{
 
         @Test
