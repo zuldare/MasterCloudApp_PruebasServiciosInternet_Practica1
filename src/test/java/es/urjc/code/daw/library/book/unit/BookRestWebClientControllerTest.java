@@ -16,9 +16,9 @@ import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -119,8 +119,7 @@ public class BookRestWebClientControllerTest {
 
         @Test
         @DisplayName("POST new book with no logged user must fail. UNAUTHORIZED(401)")
-        void createBookWithoutLoggedUser() throws Exception {
-
+        void createBookWithoutLoggedUser() {
             webTestClient.post()
                     .uri(BOOKS_URL)
                     .contentType(MediaType.APPLICATION_JSON)
@@ -128,37 +127,39 @@ public class BookRestWebClientControllerTest {
                     .exchange()
                     .expectStatus().isUnauthorized();
         }
+        @Test
+        @DisplayName("POST new book with logged user must create user. CREATED(201)")
+        @WithMockUser(username = "user", password = "pass", roles = "USER")
+        void createBookWithLoggedUser() {
+            when(bookService.save(any(Book.class)))
+                    .thenReturn(new Book(NEW_BOOK_TITLE, NEW_BOOK_DESCRIPTION));
 
-//        @Test
-//        @DisplayName("POST new book with logged user must create user. CREATED(201)")
-//        @WithMockUser(username = "user", password = "pass", roles = "USER")
-//        void createBookWithLoggedUser() throws Exception {
-//
-//            when(bookService.save(any(Book.class)))
-//                    .thenReturn(new Book(NEW_BOOK_TITLE, NEW_BOOK_DESCRIPTION));
-//
-//            mockMvc.perform( MockMvcRequestBuilders
-//                    .post(BOOKS_URL)
-//                    .content(asJsonString(new Book(NEW_BOOK_TITLE, NEW_BOOK_DESCRIPTION)))
-//                    .contentType(MediaType.APPLICATION_JSON)
-//                    .accept(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isCreated())
-//                    .andExpect(jsonPath("$.title", equalTo(NEW_BOOK_TITLE)))
-//                    .andExpect(jsonPath("$.description", equalTo(NEW_BOOK_DESCRIPTION)));
-//        }
+            webTestClient.post()
+                    .uri(BOOKS_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(new Book(NEW_BOOK_TITLE, NEW_BOOK_DESCRIPTION))
+                    .exchange()
+                    .expectStatus().isCreated()
+                    .expectBody()
+                            .jsonPath("$.id").value(is(nullValue()))
+                            .jsonPath("$.title").value(equalTo(NEW_BOOK_TITLE))
+                            .jsonPath("$.description").value(equalTo(NEW_BOOK_DESCRIPTION)
+                    );
+        }
     }
-//
-//
-//    @Nested
-//    @DisplayName("Delete books ")
-//    class deletingBooks{
-//        @Test
-//        @DisplayName("DELETE book with unauthorized user must fail. UNAUTHORIZED(401)")
-//        void deleteBookWithUnauthorizedUserMustFail() throws Exception {
-//            mockMvc.perform(delete(BOOKS_URL + "{id}", 1)
-//                    .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isUnauthorized());
-//        }
+
+    @Nested
+    @DisplayName("Delete books ")
+    class deletingBooks {
+        @Test
+        @DisplayName("DELETE book with unauthorized user must fail. UNAUTHORIZED(401)")
+        void deleteBookWithUnauthorizedUserMustFail() throws Exception {
+            webTestClient.delete()
+                    .uri(BOOKS_URL, 1)
+                    .exchange()
+                    .expectStatus().isUnauthorized();
+        }
+    }
 //
 //        @Test
 //        @DisplayName("DELETE book with authorized user ROLE USER must fail. FORBIDDEN(403)")
