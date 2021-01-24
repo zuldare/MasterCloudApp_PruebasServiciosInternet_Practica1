@@ -61,12 +61,19 @@ public class BookRestAssuredControllerTest {
                     .get(BOOKS_URL)
             .then()
                     .statusCode(200)
-                    .body(
-                            "size()", is(5),
-                            //"$.size()", is(5)
-                            "[0].title", is(SUENIOS_DE_ACERO_Y_NEON_TITLE),
-                            "[1].title", is(LA_VIDA_SECRETA_DE_LA_MENTE_TITLE)
-                    );
+                    .body("title", containsInAnyOrder(SUENIOS_DE_ACERO_Y_NEON_TITLE, LA_VIDA_SECRETA_DE_LA_MENTE_TITLE, CASI_SIN_QUERER_TITLE, TERMINAMOS_POEMAS_TITLE, LEGION_PERDIDA_TITLE));
+// **************************
+// **     IMPORTANT        **
+// **************************
+/*
+    THIS KIND OF TESTS CAN FAIL BECAUSE OF OTHER TESTS
+        .body(
+                "size()", is(5),
+                //"$.size()", is(5)
+                "[0].title", is(SUENIOS_DE_ACERO_Y_NEON_TITLE),
+                "[1].title", is(LA_VIDA_SECRETA_DE_LA_MENTE_TITLE)
+        );
+ */
         }
 
         @Test
@@ -79,8 +86,7 @@ public class BookRestAssuredControllerTest {
                     .get(BOOKS_URL)
             .then()
                     .statusCode(200)
-                    .body("id", containsInRelativeOrder(1, 2, 3, 4, 5),
-                            "title", containsInRelativeOrder(SUENIOS_DE_ACERO_Y_NEON_TITLE, LA_VIDA_SECRETA_DE_LA_MENTE_TITLE, CASI_SIN_QUERER_TITLE, TERMINAMOS_POEMAS_TITLE, LEGION_PERDIDA_TITLE));
+                    .body("title", containsInAnyOrder(SUENIOS_DE_ACERO_Y_NEON_TITLE, LA_VIDA_SECRETA_DE_LA_MENTE_TITLE, CASI_SIN_QUERER_TITLE, TERMINAMOS_POEMAS_TITLE, LEGION_PERDIDA_TITLE));
         }
     }
 
