@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -18,12 +19,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.mockito.Mockito.*;
 
 @DisplayName("Tests for BookController with WebClient")
 @SpringBootTest
@@ -155,45 +151,49 @@ public class BookRestWebClientControllerTest {
         @DisplayName("DELETE book with unauthorized user must fail. UNAUTHORIZED(401)")
         void deleteBookWithUnauthorizedUserMustFail() throws Exception {
             webTestClient.delete()
-                    .uri(BOOKS_URL, 1)
+                    .uri(BOOKS_URL + "{id}", 1)
                     .exchange()
                     .expectStatus().isUnauthorized();
         }
+
+        @Test
+        @DisplayName("DELETE book with authorized user ROLE USER must fail. FORBIDDEN(403)")
+        @WithMockUser(username = "user", password = "pass", roles = "USER")
+        void deleteBookWithUserRolMustFail() {
+            webTestClient.delete()
+                    .uri(BOOKS_URL + "{id}", 1)
+                    .exchange()
+                    .expectStatus().isForbidden();
+        }
+
+        @Test
+        @DisplayName("DELETE book with authorized user ADMIN but no book found must fail. NOT_FOUND(404)")
+        @WithMockUser(username = "user", password = "pass", roles = "ADMIN")
+        void deleteBookWithUserOkBookNotExists() throws Exception {
+
+            doThrow(EmptyResultDataAccessException.class)
+                    .when(bookService).delete(1);
+
+            webTestClient.delete()
+                    .uri(BOOKS_URL + "{id}", 1)
+                    .exchange()
+                    .expectStatus().isNotFound();
+        }
+
+        @Test
+        @DisplayName("DELETE book with authorized user ADMIN valid book. OK(200)")
+        @WithMockUser(username = "user", password = "pass", roles = "ADMIN")
+        void deleteBookWithUserOkAdminRole()  {
+
+            doNothing().when(bookService).delete(1L);
+
+            webTestClient.delete()
+                    .uri(BOOKS_URL + "{id}", 1)
+                    .exchange()
+                    .expectStatus().isOk();
+        }
     }
-//
-//        @Test
-//        @DisplayName("DELETE book with authorized user ROLE USER must fail. FORBIDDEN(403)")
-//        @WithMockUser(username = "user", password = "pass", roles = "USER")
-//        void deleteBookWithUserRolMustFail() throws Exception {
-//            mockMvc.perform(delete(BOOKS_URL + "{id}", 1)
-//                    .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isForbidden());
-//        }
-//
-//        @Test
-//        @DisplayName("DELETE book with authorized user ADMIN but no book found must fail. NOT_FOUND(404)")
-//        @WithMockUser(username = "user", password = "pass", roles = "ADMIN")
-//        void deleteBookWithUserOkBookNotExists() throws Exception {
-//
-//            doThrow(EmptyResultDataAccessException.class)
-//                    .when(bookService).delete(1);
-//
-//            mockMvc.perform(delete(BOOKS_URL + "{id}", 1)
-//                    .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isNotFound());
-//        }
-//
-//        @Test
-//        @DisplayName("DELETE book with authorized user ADMIN valid book. OK(200)")
-//        @WithMockUser(username = "user", password = "pass", roles = "ADMIN")
-//        void deleteBookWithUserOkAdminRole() throws Exception {
-//
-//            mockMvc.perform(delete(BOOKS_URL + "{id}", 1)
-//                    .contentType(MediaType.APPLICATION_JSON))
-//                    .andExpect(status().isOk());
-//        }
-//    }
-//
+
     private static List<Book> generateFullBooksList(){
         Book book1 = new Book(SUENIOS_DE_ACERO_Y_NEON_TITLE, SUENIOS_DE_ACERO_Y_NEON_DESCRIPTION);
         book1.setId(ID_1);
