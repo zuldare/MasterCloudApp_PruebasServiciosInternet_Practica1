@@ -1,7 +1,5 @@
 package es.urjc.code.daw.library;
 
-import es.urjc.code.daw.library.book.Book;
-import es.urjc.code.daw.library.book.BookRepository;
 import es.urjc.code.daw.library.user.User;
 import es.urjc.code.daw.library.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

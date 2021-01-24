@@ -1,16 +1,17 @@
-package es.urjc.code.daw.library.book.e2e;
+package es.urjc.code.daw.library.e2e;
 
-import es.urjc.code.daw.library.book.Book;
-import es.urjc.code.daw.library.book.BookService;
+import es.urjc.code.daw.library.Book;
+import es.urjc.code.daw.library.BookService;
+import es.urjc.code.daw.library.TestConstants;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
-import static es.urjc.code.daw.library.book.TestConstants.*;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -46,10 +47,10 @@ public class BookRestAssuredControllerTest {
             given()
                     .relaxedHTTPSValidation()
             .when()
-                    .get(BOOKS_URL)
+                    .get(TestConstants.BOOKS_URL)
             .then()
                     .statusCode(200)
-                    .body("title", containsInAnyOrder(SUENIOS_DE_ACERO_Y_NEON_TITLE, LA_VIDA_SECRETA_DE_LA_MENTE_TITLE, CASI_SIN_QUERER_TITLE, TERMINAMOS_POEMAS_TITLE, LEGION_PERDIDA_TITLE));
+                    .body("title", Matchers.containsInAnyOrder(TestConstants.SUENIOS_DE_ACERO_Y_NEON_TITLE, TestConstants.LA_VIDA_SECRETA_DE_LA_MENTE_TITLE, TestConstants.CASI_SIN_QUERER_TITLE, TestConstants.TERMINAMOS_POEMAS_TITLE, TestConstants.LEGION_PERDIDA_TITLE));
 // **************************
 // **     IMPORTANT        **
 // **************************
@@ -69,12 +70,12 @@ public class BookRestAssuredControllerTest {
         void getBookWithLoggedUser() {
             given()
                     .auth()
-                    .basic(USER_USER, PASSWORD)
+                    .basic(TestConstants.USER_USER, TestConstants.PASSWORD)
             .when()
-                    .get(BOOKS_URL)
+                    .get(TestConstants.BOOKS_URL)
             .then()
                     .statusCode(200)
-                    .body("title", containsInAnyOrder(SUENIOS_DE_ACERO_Y_NEON_TITLE, LA_VIDA_SECRETA_DE_LA_MENTE_TITLE, CASI_SIN_QUERER_TITLE, TERMINAMOS_POEMAS_TITLE, LEGION_PERDIDA_TITLE));
+                    .body("title", Matchers.containsInAnyOrder(TestConstants.SUENIOS_DE_ACERO_Y_NEON_TITLE, TestConstants.LA_VIDA_SECRETA_DE_LA_MENTE_TITLE, TestConstants.CASI_SIN_QUERER_TITLE, TestConstants.TERMINAMOS_POEMAS_TITLE, TestConstants.LEGION_PERDIDA_TITLE));
         }
     }
 
@@ -88,7 +89,7 @@ public class BookRestAssuredControllerTest {
         @DisplayName("POST new book with no logged user must fail. UNAUTHORIZED(401)")
         void createBookWithoutLoggedUser() {
             when()
-                    .post(BOOKS_URL)
+                    .post(TestConstants.BOOKS_URL)
                     .then()
                     .statusCode(HttpStatus.UNAUTHORIZED.value());
         }
@@ -100,11 +101,11 @@ public class BookRestAssuredControllerTest {
             // Set test conditions/asserts & retrieve element for posterior use
             Book bookPosted = given()
                     .auth()
-                    .basic(USER_USER, PASSWORD)
+                    .basic(TestConstants.USER_USER, TestConstants.PASSWORD)
                     .contentType(ContentType.JSON)
                     .body(new Book(NEW_BOOK_TITLE, NEW_BOOK_DESCRIPTION))
                         .when()
-                        .post(BOOKS_URL)
+                        .post(TestConstants.BOOKS_URL)
                         .then()
                             .statusCode(HttpStatus.CREATED.value())
                             .body("id", notNullValue(),
@@ -129,7 +130,7 @@ public class BookRestAssuredControllerTest {
         @DisplayName("DELETE book with unauthorized user must fail. UNAUTHORIZED(401)")
         void deleteBookWithUnauthorizedUserMustFail(){
             when()
-                    .delete(BOOKS_URL + "{id}",1)
+                    .delete(TestConstants.BOOKS_URL + "{id}",1)
             .then()
                     .statusCode(HttpStatus.UNAUTHORIZED.value());
         }
@@ -139,9 +140,9 @@ public class BookRestAssuredControllerTest {
         void deleteBookWithUserRolMustFail(){
             given()
                     .auth()
-                    .basic(USER_USER, PASSWORD)
+                    .basic(TestConstants.USER_USER, TestConstants.PASSWORD)
             .when()
-                    .delete(BOOKS_URL + "{id}",1)
+                    .delete(TestConstants.BOOKS_URL + "{id}",1)
             .then()
                     .statusCode(HttpStatus.FORBIDDEN.value());
         }
@@ -153,9 +154,9 @@ public class BookRestAssuredControllerTest {
 
             given()
                     .auth()
-                    .basic(USER_ADMIN, PASSWORD)
+                    .basic(TestConstants.USER_ADMIN, TestConstants.PASSWORD)
             .when()
-                    .delete(BOOKS_URL + "{id}",1)
+                    .delete(TestConstants.BOOKS_URL + "{id}",bookToBeDeleted.getId())
             .then()
                     .statusCode(HttpStatus.OK.value());
 

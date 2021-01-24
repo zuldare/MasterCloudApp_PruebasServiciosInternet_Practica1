@@ -1,7 +1,7 @@
 package es.urjc.code.daw.library.rest;
 
-import es.urjc.code.daw.library.book.Book;
-import es.urjc.code.daw.library.book.BookService;
+import es.urjc.code.daw.library.Book;
+import es.urjc.code.daw.library.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;

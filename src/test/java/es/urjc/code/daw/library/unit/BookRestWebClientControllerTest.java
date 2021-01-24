@@ -1,7 +1,8 @@
-package es.urjc.code.daw.library.book.unit;
+package es.urjc.code.daw.library.unit;
 
-import es.urjc.code.daw.library.book.Book;
-import es.urjc.code.daw.library.book.BookService;
+import es.urjc.code.daw.library.Book;
+import es.urjc.code.daw.library.BookService;
+import es.urjc.code.daw.library.TestConstants;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,7 +18,6 @@ import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 import java.util.Arrays;
 import java.util.List;
 
-import static es.urjc.code.daw.library.book.TestConstants.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -54,7 +54,7 @@ public class BookRestWebClientControllerTest {
                     .thenReturn(generateFullBooksList());
 
             webTestClient.get()
-                    .uri(BOOKS_URL)
+                    .uri(TestConstants.BOOKS_URL)
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -62,13 +62,13 @@ public class BookRestWebClientControllerTest {
                     .jsonPath("$").isArray()
                     .jsonPath("$").isNotEmpty()
 
-                    .jsonPath("$[0].id").value(equalTo(ID_1.intValue()))
-                    .jsonPath("$[0].title").value(equalTo(SUENIOS_DE_ACERO_Y_NEON_TITLE))
-                    .jsonPath("$[0].description").value(equalTo(SUENIOS_DE_ACERO_Y_NEON_DESCRIPTION))
+                    .jsonPath("$[0].id").value(equalTo(TestConstants.ID_1.intValue()))
+                    .jsonPath("$[0].title").value(equalTo(TestConstants.SUENIOS_DE_ACERO_Y_NEON_TITLE))
+                    .jsonPath("$[0].description").value(equalTo(TestConstants.SUENIOS_DE_ACERO_Y_NEON_DESCRIPTION))
 
-                    .jsonPath("$[1].id").value(equalTo(ID_2.intValue()))
-                    .jsonPath("$[1].title").value(equalTo(LA_VIDA_SECRETA_DE_LA_MENTE_TITLE))
-                    .jsonPath("$[1].description").value(equalTo(LA_VIDA_SECRETA_DE_LA_MENTE_DESCRIPTION));
+                    .jsonPath("$[1].id").value(equalTo(TestConstants.ID_2.intValue()))
+                    .jsonPath("$[1].title").value(equalTo(TestConstants.LA_VIDA_SECRETA_DE_LA_MENTE_TITLE))
+                    .jsonPath("$[1].description").value(equalTo(TestConstants.LA_VIDA_SECRETA_DE_LA_MENTE_DESCRIPTION));
         }
 
         @Test
@@ -80,7 +80,7 @@ public class BookRestWebClientControllerTest {
                     .thenReturn(generateFullBooksList());
 
             webTestClient.get()
-                    .uri(BOOKS_URL)
+                    .uri(TestConstants.BOOKS_URL)
                     .exchange()
                     .expectStatus().isOk()
                     .expectBody()
@@ -88,13 +88,13 @@ public class BookRestWebClientControllerTest {
                     .jsonPath("$").isArray()
                     .jsonPath("$").isNotEmpty()
 
-                    .jsonPath("$[0].id").value(equalTo(ID_1.intValue()))
-                    .jsonPath("$[0].title").value(equalTo(SUENIOS_DE_ACERO_Y_NEON_TITLE))
-                    .jsonPath("$[0].description").value(equalTo(SUENIOS_DE_ACERO_Y_NEON_DESCRIPTION))
+                    .jsonPath("$[0].id").value(equalTo(TestConstants.ID_1.intValue()))
+                    .jsonPath("$[0].title").value(equalTo(TestConstants.SUENIOS_DE_ACERO_Y_NEON_TITLE))
+                    .jsonPath("$[0].description").value(equalTo(TestConstants.SUENIOS_DE_ACERO_Y_NEON_DESCRIPTION))
 
-                    .jsonPath("$[1].id").value(equalTo(ID_2.intValue()))
-                    .jsonPath("$[1].title").value(equalTo(LA_VIDA_SECRETA_DE_LA_MENTE_TITLE))
-                    .jsonPath("$[1].description").value(equalTo(LA_VIDA_SECRETA_DE_LA_MENTE_DESCRIPTION));
+                    .jsonPath("$[1].id").value(equalTo(TestConstants.ID_2.intValue()))
+                    .jsonPath("$[1].title").value(equalTo(TestConstants.LA_VIDA_SECRETA_DE_LA_MENTE_TITLE))
+                    .jsonPath("$[1].description").value(equalTo(TestConstants.LA_VIDA_SECRETA_DE_LA_MENTE_DESCRIPTION));
         }
     }
 
@@ -106,9 +106,9 @@ public class BookRestWebClientControllerTest {
         @DisplayName("POST new book with no logged user must fail. UNAUTHORIZED(401)")
         void createBookWithoutLoggedUser() {
             webTestClient.post()
-                    .uri(BOOKS_URL)
+                    .uri(TestConstants.BOOKS_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(new Book(NEW_BOOK_TITLE, NEW_BOOK_DESCRIPTION))
+                    .bodyValue(new Book(TestConstants.NEW_BOOK_TITLE, TestConstants.NEW_BOOK_DESCRIPTION))
                     .exchange()
                     .expectStatus().isUnauthorized();
         }
@@ -117,18 +117,18 @@ public class BookRestWebClientControllerTest {
         @WithMockUser(username = "user", password = "pass", roles = "USER")
         void createBookWithLoggedUser() {
             when(bookService.save(any(Book.class)))
-                    .thenReturn(new Book(NEW_BOOK_TITLE, NEW_BOOK_DESCRIPTION));
+                    .thenReturn(new Book(TestConstants.NEW_BOOK_TITLE, TestConstants.NEW_BOOK_DESCRIPTION));
 
             webTestClient.post()
-                    .uri(BOOKS_URL)
+                    .uri(TestConstants.BOOKS_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(new Book(NEW_BOOK_TITLE, NEW_BOOK_DESCRIPTION))
+                    .bodyValue(new Book(TestConstants.NEW_BOOK_TITLE, TestConstants.NEW_BOOK_DESCRIPTION))
                     .exchange()
                     .expectStatus().isCreated()
                     .expectBody()
                             .jsonPath("$.id").value(is(nullValue()))
-                            .jsonPath("$.title").value(equalTo(NEW_BOOK_TITLE))
-                            .jsonPath("$.description").value(equalTo(NEW_BOOK_DESCRIPTION)
+                            .jsonPath("$.title").value(equalTo(TestConstants.NEW_BOOK_TITLE))
+                            .jsonPath("$.description").value(equalTo(TestConstants.NEW_BOOK_DESCRIPTION)
                     );
         }
     }
@@ -140,7 +140,7 @@ public class BookRestWebClientControllerTest {
         @DisplayName("DELETE book with unauthorized user must fail. UNAUTHORIZED(401)")
         void deleteBookWithUnauthorizedUserMustFail() throws Exception {
             webTestClient.delete()
-                    .uri(BOOKS_URL + "{id}", 1)
+                    .uri(TestConstants.BOOKS_URL + "{id}", 1)
                     .exchange()
                     .expectStatus().isUnauthorized();
         }
@@ -150,7 +150,7 @@ public class BookRestWebClientControllerTest {
         @WithMockUser(username = "user", password = "pass", roles = "USER")
         void deleteBookWithUserRolMustFail() {
             webTestClient.delete()
-                    .uri(BOOKS_URL + "{id}", 1)
+                    .uri(TestConstants.BOOKS_URL + "{id}", 1)
                     .exchange()
                     .expectStatus().isForbidden();
         }
@@ -164,7 +164,7 @@ public class BookRestWebClientControllerTest {
                     .when(bookService).delete(1);
 
             webTestClient.delete()
-                    .uri(BOOKS_URL + "{id}", 1)
+                    .uri(TestConstants.BOOKS_URL + "{id}", 1)
                     .exchange()
                     .expectStatus().isNotFound();
         }
@@ -177,18 +177,18 @@ public class BookRestWebClientControllerTest {
             doNothing().when(bookService).delete(1L);
 
             webTestClient.delete()
-                    .uri(BOOKS_URL + "{id}", 1)
+                    .uri(TestConstants.BOOKS_URL + "{id}", 1)
                     .exchange()
                     .expectStatus().isOk();
         }
     }
 
     private static List<Book> generateFullBooksList(){
-        Book book1 = new Book(SUENIOS_DE_ACERO_Y_NEON_TITLE, SUENIOS_DE_ACERO_Y_NEON_DESCRIPTION);
-        book1.setId(ID_1);
+        Book book1 = new Book(TestConstants.SUENIOS_DE_ACERO_Y_NEON_TITLE, TestConstants.SUENIOS_DE_ACERO_Y_NEON_DESCRIPTION);
+        book1.setId(TestConstants.ID_1);
 
-        Book book2 = new Book(LA_VIDA_SECRETA_DE_LA_MENTE_TITLE, LA_VIDA_SECRETA_DE_LA_MENTE_DESCRIPTION);
-        book2.setId(ID_2);
+        Book book2 = new Book(TestConstants.LA_VIDA_SECRETA_DE_LA_MENTE_TITLE, TestConstants.LA_VIDA_SECRETA_DE_LA_MENTE_DESCRIPTION);
+        book2.setId(TestConstants.ID_2);
 
         return Arrays.asList( book1, book2);
     }

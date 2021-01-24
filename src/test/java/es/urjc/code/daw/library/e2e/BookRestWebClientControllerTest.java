@@ -1,7 +1,7 @@
-package es.urjc.code.daw.library.book.e2e;
+package es.urjc.code.daw.library.e2e;
 
-import es.urjc.code.daw.library.book.Book;
-import es.urjc.code.daw.library.book.BookRepository;
+import es.urjc.code.daw.library.Book;
+import es.urjc.code.daw.library.BookRepository;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
@@ -19,7 +19,7 @@ import reactor.netty.http.client.HttpClient;
 import javax.net.ssl.SSLException;
 import java.util.List;
 
-import static es.urjc.code.daw.library.book.TestConstants.*;
+import static es.urjc.code.daw.library.TestConstants.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;

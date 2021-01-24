@@ -4,7 +4,7 @@ import org.junit.platform.suite.api.SelectPackages;
 import org.junit.runner.RunWith;
 
 @RunWith(JUnitPlatform.class)
-@SelectPackages({"es.urjc.code.daw.library.book"})
+@SelectPackages({"es.urjc.code.daw.library"})
 @IncludeTags("E2E-Tests")
-public class AllE2ETest {
+public class AllE2ETestSuite {
 }

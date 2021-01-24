@@ -1,4 +1,4 @@
-package es.urjc.code.daw.library.book;
+package es.urjc.code.daw.library;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
