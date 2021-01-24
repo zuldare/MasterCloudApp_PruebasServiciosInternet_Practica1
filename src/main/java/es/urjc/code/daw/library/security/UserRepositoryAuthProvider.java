@@ -1,8 +1,8 @@
 package es.urjc.code.daw.library.security;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import es.urjc.code.daw.library.user.User;
+import es.urjc.code.daw.library.user.UserComponent;
+import es.urjc.code.daw.library.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,9 +14,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import es.urjc.code.daw.library.user.User;
-import es.urjc.code.daw.library.user.UserComponent;
-import es.urjc.code.daw.library.user.UserRepository;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is used to check http credentials against database data. Also it
