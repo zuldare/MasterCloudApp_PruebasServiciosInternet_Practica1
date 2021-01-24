@@ -2,10 +2,7 @@ package es.urjc.code.daw.library.book.unit;
 
 import es.urjc.code.daw.library.book.Book;
 import es.urjc.code.daw.library.book.BookService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Tests for BookController with WebClient")
 @SpringBootTest
 @AutoConfigureMockMvc
+@Tag("UnitTests")
 public class BookRestWebClientControllerTest {
 
     private static final String BOOKS_URL = "/api/books/";
