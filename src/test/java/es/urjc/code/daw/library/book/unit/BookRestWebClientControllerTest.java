@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 import java.util.Arrays;
 import java.util.List;
 
+import static es.urjc.code.daw.library.book.TestConstants.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -26,14 +27,6 @@ import static org.mockito.Mockito.*;
 @AutoConfigureMockMvc
 @Tag("UnitTests")
 public class BookRestWebClientControllerTest {
-
-    private static final String BOOKS_URL = "/api/books/";
-    private static final String SUENIOS_DE_ACERO_Y_NEON_TITLE = "SUEÑOS DE ACERO Y NEON";
-    private static final String SUENIOS_DE_ACERO_Y_NEON_DESCRIPTION = "Los personajes que protagonizan este relato sobreviven en una sociedad en decadencia a la que, no obstante, lograrán devolver la posibilidad de un futuro. Año 2484. En un mundo dominado por las grandes corporaciones, solo un hombre, Jordi Thompson, detective privado deslenguado y vividor, pero de gran talento y sentido d...";
-    private static final String LA_VIDA_SECRETA_DE_LA_MENTE_TITLE = "LA VIDA SECRETA DE LA MENTE";
-    private static final String LA_VIDA_SECRETA_DE_LA_MENTE_DESCRIPTION = "La vida secreta de la mentees un viaje especular que recorre el cerebro y el pensamiento: se trata de descubrir nuestra mente para entendernos hasta en los más pequeños rincones que componen lo que somos, cómo forjamos las ideas en los primeros días de vida, cómo damos forma a las decisiones que nos constituyen, cómo soñamos y cómo imaginamos, por qué sentimos ciertas emociones hacia los demás, cómo los demás influyen en nosotros, y cómo el cerebro se transforma y, con él, lo que somos.";
-    private static final Long ID_1 = 1L;
-    private static final Long ID_2 = 2L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -49,7 +42,6 @@ public class BookRestWebClientControllerTest {
                 .bindTo(mockMvc)
                 .build();
     }
-
 
     @Nested
     @DisplayName("Get books ")
@@ -109,9 +101,6 @@ public class BookRestWebClientControllerTest {
     @Nested
     @DisplayName("Create new books ")
     class creatingNewBooks{
-
-        private static final String NEW_BOOK_TITLE = "NewBook Title";
-        private static final String NEW_BOOK_DESCRIPTION = "NewBook description";
 
         @Test
         @DisplayName("POST new book with no logged user must fail. UNAUTHORIZED(401)")
@@ -203,12 +192,4 @@ public class BookRestWebClientControllerTest {
 
         return Arrays.asList( book1, book2);
     }
-//
-//    public static String asJsonString(final Object obj) {
-//        try {
-//            return new ObjectMapper().writeValueAsString(obj);
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 }

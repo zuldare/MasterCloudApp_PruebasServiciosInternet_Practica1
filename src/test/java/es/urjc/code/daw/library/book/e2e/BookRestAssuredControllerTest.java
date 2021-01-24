@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
+import static es.urjc.code.daw.library.book.TestConstants.*;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,16 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Tag("E2E-Tests")
 public class BookRestAssuredControllerTest {
 
-    private static final String BOOKS_URL = "/api/books/";
-    private static final String SUENIOS_DE_ACERO_Y_NEON_TITLE = "SUEÑOS DE ACERO Y NEON";
-    private static final String LA_VIDA_SECRETA_DE_LA_MENTE_TITLE = "LA VIDA SECRETA DE LA MENTE";
-    private static final String CASI_SIN_QUERER_TITLE = "CASI SIN QUERER";
-    private static final String TERMINAMOS_POEMAS_TITLE = "TERMINAMOS Y OTROS POEMAS SIN TERMINAR";
-    private static final String LEGION_PERDIDA_TITLE = "LA LEGIÓN PERDIDA";
-
-    private static final String USER_USER = "user";
-    private static final String PASSWORD = "pass";
-    private static final String USER_ADMIN = "admin";
 
     @LocalServerPort
     int port;
